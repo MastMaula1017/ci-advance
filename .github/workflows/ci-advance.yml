@@ -35,20 +35,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create tar artifact
+      - name: Create tar artifact (correct way)
         run: |
-          tar -czf flask-app.tar.gz \
-            app1.py python.py requirements.txt README.md test_app1.py Pep Pep2 \
-            --exclude=__pycache__ \
-            --exclude=.pytest_cache \
-            --exclude=.git \
-            --exclude=.github
+          tar --exclude=.git \
+              --exclude=.github \
+              --exclude=__pycache__ \
+              --exclude=.pytest_cache \
+              -czf flask-app.tar.gz .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-artifact-flask
           path: flask-app.tar.gz
+
 
   deploy-dev:
     runs-on: ubuntu-latest
