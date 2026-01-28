@@ -25,7 +25,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run tests
-        run: python -m pytest
+        run: pytest
 
   package:
     runs-on: ubuntu-latest
@@ -35,9 +35,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create artifact
+      - name: Create tar artifact
         run: |
-          tar -czf flask-app.tar.gz .
+          tar -czf flask-app.tar.gz \
+            app1.py python.py requirements.txt README.md test_app1.py Pep Pep2 \
+            --exclude=__pycache__ \
+            --exclude=.pytest_cache \
+            --exclude=.git \
+            --exclude=.github
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -78,6 +83,7 @@ jobs:
           echo "Deploying to PROD"
           mkdir prod-release
           tar -xzf flask-app.tar.gz -C prod-release
+
 
 
 # name: CI Advanced Python Tests
