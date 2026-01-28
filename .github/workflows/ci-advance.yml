@@ -27,7 +27,7 @@ jobs:
       - name: Run tests
         run: pytest
 
-  package:
+    package:
     runs-on: ubuntu-latest
     needs: test
 
@@ -35,19 +35,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create tar artifact (correct way)
+      - name: Create build folder
         run: |
-          tar --exclude=.git \
-              --exclude=.github \
-              --exclude=__pycache__ \
-              --exclude=.pytest_cache \
-              -czf flask-app.tar.gz .
+          mkdir build
+          cp -r app1.py python.py requirements.txt README.md test_app1.py Pep Pep2 build/ || true
+
+      - name: Create tar artifact (SAFE)
+        run: |
+          tar -czf flask-app.tar.gz build/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-artifact-flask
           path: flask-app.tar.gz
+
 
 
   deploy-dev:
