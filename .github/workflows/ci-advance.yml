@@ -1,4 +1,4 @@
-name: CI/CD Flask App
+name: CI/CD Flask App (with tar)
 
 on:
   push:
@@ -22,10 +22,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r CI-CD/requirements.txt
 
       - name: Run tests
-        run: pytest -v
+        run: pytest CI-CD/test_app1.py -v
 
 
   package:
@@ -36,9 +36,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create artifact ✅ FIXED
+      - name: Create artifact with tar
         run: |
-          tar --exclude=flask-app.tar.gz -czf flask-app.tar.gz .
+          tar -czf flask-app.tar.gz CI-CD/*.py CI-CD/requirements.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -63,6 +63,7 @@ jobs:
           echo "Deploying to DEV"
           mkdir dev-release
           tar -xzf flask-app.tar.gz -C dev-release
+          ls dev-release
 
 
   deploy-prod:
@@ -81,6 +82,7 @@ jobs:
           echo "Deploying to PROD"
           mkdir prod-release
           tar -xzf flask-app.tar.gz -C prod-release
+          ls prod-release
 
 
 
