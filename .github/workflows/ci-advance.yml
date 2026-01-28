@@ -1,4 +1,4 @@
-name: CI Advanced Python Tests and Deploy
+name: CI Advanced Python Tests and Deployyy
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
       - name: Run tests
         run: pytest
 
-    package:
+  package:
     runs-on: ubuntu-latest
     needs: test
 
@@ -49,8 +49,6 @@ jobs:
         with:
           name: app-artifact-flask
           path: flask-app.tar.gz
-
-
 
   deploy-dev:
     runs-on: ubuntu-latest
